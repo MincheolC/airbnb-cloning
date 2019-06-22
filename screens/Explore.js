@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Category from "./components/Explore/Category";
+import Home from "./components/Explore/Home";
 
 const { height, width } = Dimensions.get("window");
 
@@ -114,6 +115,30 @@ class Explore extends Component {
                     source={require("../assets/home.jpg")}
                   />
                 </View>
+              </View>
+            </View>
+            <View style={{ marginTop: 40 }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "700",
+                  paddingHorizontal: 20
+                }}
+              >
+                Homes around the world
+              </Text>
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  marginTop: 20,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between"
+                }}
+              >
+                <Home width={width} name="The Cozy Place" type="PRIVATE ROOM - 2 BED" price={82} rating={4} />
+                <Home width={width} name="The Cozy Place" type="PRIVATE ROOM - 2 BED" price={82} rating={4} />
+                <Home width={width} name="The Cozy Place" type="PRIVATE ROOM - 2 BED" price={82} rating={4} />
               </View>
             </View>
           </ScrollView>
