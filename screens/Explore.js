@@ -9,29 +9,54 @@ import {
   Image,
   Platform,
   StatusBar,
-  Dimensions
+  Dimensions,
+  Animated
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Category from "./components/Explore/Category";
 import Home from "./components/Explore/Home";
+import Tag from "./components/Explore/Tag";
 
 const { height, width } = Dimensions.get("window");
 
 class Explore extends Component {
   componentWillMount() {
+    this.scrollY = new Animated.Value(0);
+
     this.startHeaderHeight = 80;
+    this.endHeaderHeight = 50;
+
     if (Platform.OS == "android") {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
+      this.endHeaderHeight = 70 + StatusBar.currentHeight;
     }
+
+    this.animatedHeaderHeight = this.scrollY.interpolate({
+      inputRange: [0, 50],
+      outputRange: [this.startHeaderHeight, this.endHeaderHeight],
+      extrapolate: "clamp"
+    });
+
+    this.animatedOpacity = this.animatedHeaderHeight.interpolate({
+      inputRange: [this.endHeaderHeight, this.startHeaderHeight],
+      outputRange: [0, 1],
+      extrapolate: "clamp"
+    });
+
+    this.animatedTagTop = this.animatedHeaderHeight.interpolate({
+      inputRange: [this.endHeaderHeight, this.startHeaderHeight],
+      outputRange: [-30, 10],
+      extrapolate: "clamp"
+    });
   }
 
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <View
+          <Animated.View
             style={{
-              height: this.startHeaderHeight,
+              height: this.animatedHeaderHeight,
               backgroundColor: "white",
               borderBottomWidth: 1,
               borderBottomColor: "#dddddd"
@@ -62,8 +87,27 @@ class Explore extends Component {
                 style={{ flex: 1, fontWeight: "700", backgroundColor: "white" }}
               />
             </View>
-          </View>
-          <ScrollView scrollEventThrottle={16}>
+            <Animated.View
+              style={{
+                flexDirection: "row",
+                marginHorizontal: 20,
+                position: "relative",
+                top: this.animatedTagTop,
+                opacity: this.animatedOpacity
+              }}
+            >
+              <Tag name="Guest" />
+              <Tag name="Dates" />
+            </Animated.View>
+          </Animated.View>
+          <ScrollView
+            scrollEventThrottle={16}
+            onScroll={Animated.event([
+              {
+                nativeEvent: { contentOffset: { y: this.scrollY } }
+              }
+            ])}
+          >
             <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
               <Text
                 style={{
@@ -136,9 +180,27 @@ class Explore extends Component {
                   justifyContent: "space-between"
                 }}
               >
-                <Home width={width} name="The Cozy Place" type="PRIVATE ROOM - 2 BED" price={82} rating={4} />
-                <Home width={width} name="The Cozy Place" type="PRIVATE ROOM - 2 BED" price={82} rating={4} />
-                <Home width={width} name="The Cozy Place" type="PRIVATE ROOM - 2 BED" price={82} rating={4} />
+                <Home
+                  width={width}
+                  name="The Cozy Place"
+                  type="PRIVATE ROOM - 2 BED"
+                  price={82}
+                  rating={4}
+                />
+                <Home
+                  width={width}
+                  name="The Cozy Place"
+                  type="PRIVATE ROOM - 2 BED"
+                  price={82}
+                  rating={4}
+                />
+                <Home
+                  width={width}
+                  name="The Cozy Place"
+                  type="PRIVATE ROOM - 2 BED"
+                  price={82}
+                  rating={4}
+                />
               </View>
             </View>
           </ScrollView>
